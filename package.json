@@ -4,7 +4,9 @@
   "description": "",
   "main": "src/app.js",
   "scripts": {
-    "start": "nodemon"
+    "start": "node dist/app.js",
+    "build": "tsc",
+    "start:dev": "nodemon"
   },
   "author": "Matheus Carnelutt",
   "license": "ISC",
