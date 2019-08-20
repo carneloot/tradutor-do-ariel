@@ -12,5 +12,7 @@ export const stopTranslationCommand: Middleware<ContextMessageUpdate> = (ctx, ne
     Reflect.set(messageHandler, 'shouldTranslate', false);
     ctx.reply('Agora o bot não irá mais traduzir o Ariel :(');
 
+    console.log('Parei de traduzir!');
+
     next && next();
 }

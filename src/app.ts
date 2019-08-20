@@ -23,7 +23,7 @@ class Bot {
 
     run() {
         this.bot.startPolling();
-        console.log('Running');
+        console.log('Rodando! O Ariel não será traduzido até eu ser habilitado.');
     }
 
 }

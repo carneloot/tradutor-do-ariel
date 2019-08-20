@@ -12,5 +12,7 @@ export const startTranslationCommand: Middleware<ContextMessageUpdate> = (ctx, n
     Reflect.set(messageHandler, 'shouldTranslate', true);
     ctx.reply('Agora o bot irá traduzir o Ariel :D');
 
+    console.log('Traduzindo!!');
+
     next && next();
 }
