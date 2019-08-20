@@ -11,8 +11,16 @@ const telegraf = require('telegraf')
 class Bot {
     bot: Telegraf<ContextMessageUpdate>
 
+    port: number;
+    url: string;
+    botToken: string;
+
     constructor() {
-        this.bot = new telegraf(process.env.BOT_TOKEN as string);
+        this.botToken = process.env.BOT_TOKEN || '';
+        this.url = process.env.URL || 'https://tradutor-ariel.herokuapp.com/';
+        this.port = Number(process.env.PORT) || 5000;
+
+        this.bot = new telegraf(this.botToken);
 
         Reflect.set(messageHandler, 'shouldTranslate', false);
 
@@ -21,10 +29,27 @@ class Bot {
         this.bot.command('stop_translate', stopTranslationCommand);
     }
 
+    runHeroku() {
+        this.bot.telegram.setWebhook(`${this.url}bot${this.botToken}`);
+        this.bot.startWebhook(`/bot${this.botToken}`, null, this.port);
+        this.afterRun();
+    }
+    
     run() {
+        this.bot.telegram.deleteWebhook();
         this.bot.startPolling();
+        this.afterRun();
+    }
+    
+    afterRun() {
         console.log('Rodando! O Ariel não será traduzido até eu ser habilitado.');
     }
 
 }
-new Bot().run();
+
+const bot = new Bot();
+if (process.env.NODE_ENV === 'heroku') {
+    bot.runHeroku();
+} else {
+    bot.run();
+}
