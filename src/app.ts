@@ -43,6 +43,10 @@ class Bot {
     
     afterRun() {
         console.log('Rodando! O Ariel não será traduzido até eu ser habilitado.');
+        const admins = process.env.ADMINS!.split(',').map(Number);
+        admins.forEach(admin => {
+            this.bot.telegram.sendMessage(admin, 'Bot iniciado! Por favor, me habilite para eu poder fazer meu trabalho!');
+        })
     }
 
 }

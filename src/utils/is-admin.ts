@@ -1,7 +1,9 @@
-export const isAdmin = (username?: string): boolean => {
-    if (!username) {
+import { User } from 'telegram-typings';
+
+export const isAdmin = (user?: User): boolean => {
+    if (!user) {
         return false;
     }
-    const admins = process.env.ADMINS!.split(',');
-    return !!admins.find(admin => username === admin);
+    const admins = process.env.ADMINS!.split(',').map(Number);
+    return !!admins.find(admin => user.id === admin);
 }
