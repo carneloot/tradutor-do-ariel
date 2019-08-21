@@ -22,7 +22,7 @@ class Bot {
 
         this.bot = new telegraf(this.botToken);
 
-        Reflect.set(messageHandler, 'shouldTranslate', false);
+        Reflect.set(messageHandler, 'shouldTranslate', true);
 
         this.bot.on('message', messageHandler);
         this.bot.command('start_translate', startTranslationCommand);
@@ -42,10 +42,9 @@ class Bot {
     }
     
     afterRun() {
-        console.log('Rodando! O Ariel não será traduzido até eu ser habilitado.');
         const admins = process.env.ADMINS!.split(',').map(Number);
         admins.forEach(admin => {
-            this.bot.telegram.sendMessage(admin, 'Bot iniciado! Por favor, me habilite para eu poder fazer meu trabalho!');
+            this.bot.telegram.sendMessage(admin, 'Bot iniciado! Eu já estou traduzindo. Se quiser parar, já sabe o que fazer ;)');
         })
     }
 
