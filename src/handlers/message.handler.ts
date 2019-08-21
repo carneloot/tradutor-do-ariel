@@ -27,8 +27,9 @@ export const messageHandler: Middleware<ContextMessageUpdate> = (ctx, next) => {
     }
 
     const message = update.message!.text!;
+    const timestamp = update.message!.date!;
 
-    const translated = translateMessage(message);
+    const translated = translateMessage(timestamp, message);
 
     ctx.reply(translated);
 
