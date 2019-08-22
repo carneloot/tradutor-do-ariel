@@ -1,17 +1,41 @@
 import moment from 'moment-timezone';
 
-export const translateMessage = (timestamp: number, message: string): string => {
+const WORD_REGEX = /[@#\/]?[0-9a-záàâãéèêíïóôõöúçñ]+/gi;
 
-    let translator = (string: string) => 'mi'.repeat(Math.max(string.length / 2, 1))
+type ReplaceFunction = (palavra: string, indice: number) => string;
+
+function isSpecialWord(word: string): boolean {
+    return word.startsWith('@') || word.startsWith('/') || word.startsWith('#');
+}
+
+function replaceWords(message: string, translator: ReplaceFunction): string {
+    let index = 0;
+
+    return message.replace(WORD_REGEX, (match) => {
+        if (isSpecialWord(match)) {
+            return match;
+        } else {
+            return translator(match, index++);
+        }
+    });
+}
+
+const mimimiReplace: ReplaceFunction = (palavra) =>
+    'mi'.repeat(Math.max(palavra.length / 2, 1));
+
+const fortniteReplace: ReplaceFunction = (_, indice) =>
+    indice % 2 ? 'nite' : 'Fort';
+
+export const translateMessage = (timestamp: number, message: string): string => {
+    let translator: ReplaceFunction = mimimiReplace;
 
     if (timestamp) {
         let hourOfMessage = moment(timestamp).tz('America/Sao_Paulo').hour();
         if (hourOfMessage >= 0 && hourOfMessage <= 8
             || hourOfMessage >= 18 && hourOfMessage <= 23) {
-            translator = (string: string) => 
-                string.split(' ').map((value, index) => (index % 2 ? 'nite' : 'Fort')).join(' ');
+            translator = fortniteReplace;
         }
     }
 
-    return message.replace(/[0-9a-záàâãéèêíïóôõöúçñ]+/gi, translator);
+    return replaceWords(message, translator);
 }

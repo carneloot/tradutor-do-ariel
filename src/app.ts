@@ -29,14 +29,14 @@ class Bot {
         this.bot.command('stop_translate', stopTranslationCommand);
     }
 
-    runHeroku() {
-        this.bot.telegram.setWebhook(`${this.url}bot${this.botToken}`);
+    async runHeroku() {
+        await this.bot.telegram.setWebhook(`${this.url}bot${this.botToken}`);
         this.bot.startWebhook(`/bot${this.botToken}`, null, this.port);
         this.afterRun();
     }
     
-    run() {
-        this.bot.telegram.deleteWebhook();
+    async run() {
+        await this.bot.telegram.deleteWebhook();
         this.bot.startPolling();
         this.afterRun();
     }
