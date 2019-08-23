@@ -30,9 +30,9 @@ export const translateMessage = (timestamp: number, message: string): string => 
     let translator: ReplaceFunction = mimimiReplace;
 
     if (timestamp) {
-        let hourOfMessage = moment(timestamp).tz('America/Sao_Paulo').hour();
-        if (hourOfMessage >= 0 && hourOfMessage <= 8
-            || hourOfMessage >= 18 && hourOfMessage <= 23) {
+        const hourOfMessage = moment.unix(timestamp).tz('America/Sao_Paulo').hour();
+        if (hourOfMessage >= 0 && hourOfMessage <= 8 ||
+            hourOfMessage >= 18 && hourOfMessage <= 23) {
             translator = fortniteReplace;
         }
     }
