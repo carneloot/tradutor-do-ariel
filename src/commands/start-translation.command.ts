@@ -1,6 +1,6 @@
-import { Middleware, ContextMessageUpdate } from 'telegraf';
+import { ContextMessageUpdate, Middleware } from 'telegraf';
+import { messageFilterHandler } from '../handlers/message-filter.handler';
 import { isAdmin } from '../utils/is-admin';
-import { messageHandler } from '../handlers/message.handler';
 
 export const startTranslationCommand: Middleware<ContextMessageUpdate> = async (ctx, next) => {
     if (!isAdmin(ctx.update.message!.from)) {
@@ -9,7 +9,7 @@ export const startTranslationCommand: Middleware<ContextMessageUpdate> = async (
         return;
     }
 
-    Reflect.set(messageHandler, 'shouldTranslate', true);
+    Reflect.set(messageFilterHandler, 'shouldTranslate', true);
     await ctx.reply('Agora o bot irá traduzir o Ariel :D');
 
     next && next();

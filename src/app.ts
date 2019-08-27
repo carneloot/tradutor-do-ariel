@@ -5,6 +5,7 @@ import { Telegraf, ContextMessageUpdate } from 'telegraf';
 import { messageHandler } from './handlers/message.handler';
 import { startTranslationCommand } from './commands/start-translation.command';
 import { stopTranslationCommand } from './commands/stop-translation.command';
+import { messageFilterHandler } from './handlers/message-filter.handler';
 
 const telegraf = require('telegraf')
 
@@ -22,8 +23,9 @@ class Bot {
 
         this.bot = new telegraf(this.botToken);
 
-        Reflect.set(messageHandler, 'shouldTranslate', true);
+        Reflect.set(messageFilterHandler, 'shouldTranslate', true);
 
+        this.bot.on('message', messageFilterHandler);
         this.bot.on('message', messageHandler);
         this.bot.command('start_translate', startTranslationCommand);
         this.bot.command('stop_translate', stopTranslationCommand);
