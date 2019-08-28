@@ -6,6 +6,7 @@ import { messageHandler } from './handlers/message.handler';
 import { startTranslationCommand } from './commands/start-translation.command';
 import { stopTranslationCommand } from './commands/stop-translation.command';
 import { messageFilterHandler } from './handlers/message-filter.handler';
+import { adminFilterHandler } from './handlers/admin-filter.handler';
 
 const telegraf = require('telegraf')
 
@@ -25,10 +26,10 @@ class Bot {
 
         Reflect.set(messageFilterHandler, 'shouldTranslate', true);
 
-        this.bot.on('message', messageFilterHandler);
-        this.bot.on('message', messageHandler);
-        this.bot.command('start_translate', startTranslationCommand);
-        this.bot.command('stop_translate', stopTranslationCommand);
+        this.bot.command('start_translate', adminFilterHandler, startTranslationCommand);
+        this.bot.command('stop_translate', adminFilterHandler, stopTranslationCommand);
+        
+        this.bot.on('message', messageFilterHandler, messageHandler);
     }
 
     async runHeroku() {
@@ -47,7 +48,7 @@ class Bot {
         const admins = process.env.ADMINS!.split(',').map(Number);
         admins.forEach(admin => {
             this.bot.telegram.sendMessage(admin, 'Bot iniciado! Eu já estou traduzindo. Se quiser parar, já sabe o que fazer ;)');
-        })
+        });
     }
 
 }

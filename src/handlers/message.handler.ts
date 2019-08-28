@@ -8,7 +8,5 @@ export const messageHandler: Middleware<ContextMessageUpdate> = (ctx, next) => {
 
     const translated = translateMessage(timestamp, message);
 
-    ctx.reply(translated);
-
-    next && next();
+    ctx.telegram.sendMessage(ctx.chat!.id, translated);
 }
